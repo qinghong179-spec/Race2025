@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             RaceTheme {
-                GameScreen(message="橫式螢幕，隱藏狀態列")
+                GameScreen(message="橫式螢幕，隱藏狀態列" )
             }
         }
     }
