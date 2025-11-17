@@ -1,28 +1,101 @@
-package tw.edu.pu.csim.qinghong179.race
+package com.example.race
 
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import kotlin.random.Random
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+// 這裡必須從正確的包導入 Horse 類別
+import tw.edu.pu.csim.qinghong179.race.Horse
 
-// 根據您的需求，將 Horse 屬性名稱保持為 HorseX 和 HorseY
-data class Horse(val number: Int) {
-    // 必須使用 mutableStateOf 或 mutableIntStateOf 才能在 Compose 中觸發重繪
-    var HorseX by mutableIntStateOf(0)
-    var HorseY by mutableIntStateOf(100 + 320 * number) // 根據您的舊邏輯設置初始 Y 座標
-    var HorseNo by mutableIntStateOf(0) // 圖片編號 (0~3)
-    private var speed by mutableIntStateOf(Random.nextInt(10, 30)) // 新增速度屬性，用於隨機移動
 
-    fun Run(){
-        // 賽馬圖片處理 (切換動畫幀)
-        HorseNo ++
-        if (HorseNo > 3){
-            HorseNo = 0
+class GameViewModel: ViewModel() {
+    var screenWidthPx by mutableStateOf(0f)
+        private set
+
+    var screenHeightPx by mutableStateOf(0f)
+        private set
+    var gameRunning by mutableStateOf(false)
+    var circleX by mutableStateOf(0f)
+    var circleY by mutableStateOf(0f)
+
+    // 新增：儲存獲勝訊息的狀態
+    var winningMessage by mutableStateOf("")
+
+    val horses = mutableListOf<Horse>()
+
+    fun SetGameSize(w: Float, h: Float) {
+        screenWidthPx = w
+        screenHeightPx = h
+
+        // 僅在列表為空時初始化，避免重複
+        if (horses.isEmpty()) {
+            for(i in 0..2){
+                horses.add(Horse(i))
+            }
         }
+    }
 
-        // 馬匹 X 座標移動
-        HorseX += speed
-        // 模擬速度隨機變化
-        speed = Random.nextInt(10, 30)
+    // 新增：重設所有馬匹位置到起點
+    private fun resetHorses() {
+        for(i in 0..2){
+            // 【修正 1：使用 HorseX 大寫】
+            horses[i].HorseX = 0
+        }
+    }
+
+    fun StartGame() {
+        //回到初使位置
+        circleX = 100f
+        circleY = screenHeightPx - 100f
+
+        // 重置獲勝訊息並將馬匹歸零，準備下一輪
+        winningMessage = ""
+        resetHorses()
+
+        // 【修正 2：啟動遊戲循環】
+        if (gameRunning) return
+        gameRunning = true // 必須設定為 true，啟動 while 迴圈
+
+        viewModelScope.launch {
+            while (gameRunning) { // 每0.1秒循環
+                delay(100)
+
+                // 圓形移動邏輯
+                circleX += 10
+                if (circleX >= screenWidthPx - 100){
+                    circleX = 100f
+                }
+
+                var winnerIndex: Int? = null
+                val finishLine = screenWidthPx - 200f // 終點線位置
+
+                for(i in 0..2){
+                    // 【修正 3：正確呼叫 Run() 函式】
+                    horses[i].Run()
+
+                    // (2) 檢查是否獲勝
+                    // 【修正 4：使用 HorseX 大寫】
+                    if(horses[i].HorseX >= finishLine){
+                        // 記錄獲勝者
+                        winnerIndex = i
+                        break // 找到獲勝者後立即跳出循環
+                    }
+                }
+
+                // 在循環結束後處理獲勝邏輯
+                if (winnerIndex != null) {
+                    gameRunning = false // 停止遊戲
+                    // 馬匹編號 (number) 從 0 開始，顯示時要 + 1
+                    winningMessage = "第${winnerIndex + 1}馬獲勝"
+                }
+            }
+        }
+    }
+    fun MoveCircle(x: Float, y: Float) {
+        circleX += x
+        circleY += y
     }
 }

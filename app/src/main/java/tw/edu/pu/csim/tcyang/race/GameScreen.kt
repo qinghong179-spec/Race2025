@@ -8,9 +8,6 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-
-
-
 class GameViewModel: ViewModel() {
     var screenWidthPx by mutableStateOf(0f)
         private set
