@@ -1,62 +1,28 @@
-package com.example.race
+package tw.edu.pu.csim.qinghong179.race
 
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.geometry.Offset
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import tw.edu.pu.csim.tcyang.race.Horse
+import kotlin.random.Random
 
-class GameViewModel: ViewModel() {
-        var screenWidthPx by mutableStateOf(0f)
-            private set
+// 根據您的需求，將 Horse 屬性名稱保持為 HorseX 和 HorseY
+data class Horse(val number: Int) {
+    // 必須使用 mutableStateOf 或 mutableIntStateOf 才能在 Compose 中觸發重繪
+    var HorseX by mutableIntStateOf(0)
+    var HorseY by mutableIntStateOf(100 + 320 * number) // 根據您的舊邏輯設置初始 Y 座標
+    var HorseNo by mutableIntStateOf(0) // 圖片編號 (0~3)
+    private var speed by mutableIntStateOf(Random.nextInt(10, 30)) // 新增速度屬性，用於隨機移動
 
-        var screenHeightPx by mutableStateOf(0f)
-            private set
-    var gameRunning by mutableStateOf(false)
-    var circleX by mutableStateOf(0f)
-    var circleY by mutableStateOf(0f)
-
-    //val horse = Horse()
-    val horses = mutableListOf<Horse>()
-
-    fun SetGameSize(w: Float, h: Float) {
-        screenWidthPx = w
-        screenHeightPx = h
-
-        for(i in 0..2){
-            horses.add(Horse(i))
-            }
+    fun Run(){
+        // 賽馬圖片處理 (切換動畫幀)
+        HorseNo ++
+        if (HorseNo > 3){
+            HorseNo = 0
         }
-    fun StartGame() {
-        //回到初使位置
-        circleX = 100f
-        circleY = screenHeightPx - 100f
 
-        viewModelScope.launch {
-            while (gameRunning) { // 每0.1秒循環
-                delay(100)
-                circleX += 10
-
-                if (circleX >= screenWidthPx - 100){
-                    circleX = 100f
-                }
-
-                for(i in 0..2){
-                    horses[i].Run()
-                    if(horses[i].HorseX>=screenWidthPx-300){
-                        horses[i].HorseX=0
-                }
-            }
-        }
+        // 馬匹 X 座標移動
+        HorseX += speed
+        // 模擬速度隨機變化
+        speed = Random.nextInt(10, 30)
     }
-    fun MoveCircle(x: Float, y: Float) {
-        circleX += x
-        circleY += y
-    }
-
-
-    }
+}

@@ -1,4 +1,4 @@
-package tw.edu.pu.csim.tcyang.race
+package tw.edu.pu.csim.qinghong179.race
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
@@ -6,20 +6,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.wear.compose.materialcore.screenHeightPx
 import androidx.window.layout.WindowMetricsCalculator
 import com.example.race.GameScreen
 import tw.edu.pu.csim.tcyang.race.ui.theme.RaceTheme
-
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,7 +52,8 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             RaceTheme {
-                GameScreen(message="橫式螢幕，隱藏狀態列.",gameViewModel)
+                // (1) 修正：更新 message 內容
+                GameScreen(message="賽馬遊戲(作者：洪詩晴) 。",gameViewModel)
             }
         }
     }

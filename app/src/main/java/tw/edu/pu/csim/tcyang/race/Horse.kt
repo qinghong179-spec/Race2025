@@ -1,4 +1,4 @@
-package tw.edu.pu.csim.tcyang.race
+package tw.edu.pu.csim.qinghong179.race
 
 class Horse(n: Int) {
     var HorseX=0
