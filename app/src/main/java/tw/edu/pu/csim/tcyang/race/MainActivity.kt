@@ -17,6 +17,7 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.wear.compose.materialcore.screenHeightPx
 import androidx.window.layout.WindowMetricsCalculator
+import com.example.race.GameScreen
 import tw.edu.pu.csim.tcyang.race.ui.theme.RaceTheme
 
 

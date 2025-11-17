@@ -1,4 +1,4 @@
-qinghong179-spec com.example.race
+package com.example.race
 
 import android.widget.Button
 import androidx.compose.foundation.Canvas
@@ -13,9 +13,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
+import tw.edu.pu.csim.tcyang.race.GameViewModel
+
+
+
 
 @Composable
 fun GameScreen(message: String,gameViewModel: GameViewModel) {
@@ -47,26 +52,31 @@ fun GameScreen(message: String,gameViewModel: GameViewModel) {
                 radius = 100f,
                 center = Offset(gameViewModel.circleX, gameViewModel.circleY)
             )
+            for(i in 0..2) {
+                drawImage(
+                    image = imageBitmaps[gameViewModel.horses[i].number],
+                    dstOffset = IntOffset(
+                        gameViewModel.horses[i].horseX,
+                        gameViewModel.horses[i].horseY),
+                    dstSize = IntSize(200, 200)
 
-            drawImage(
-                image = imageBitmap[gameViewModel.horse.HorseNo],
-                dstOffset = IntOffset(gameViewModel.horse.HorseX, gameViewModel.horse.HorseY),
-                dstSize = IntSize(300,300)
+                )
 
-            )
-        }
-        Text(
-            text = message + gameViewModel.screenWidthPx.toFloat() + "*"
-                    + gameViewModel.screenHeightPx.toFloat()
-        )
+            }
 
-        Button(onClick = {
-            gameViewModel.gameRunning = true
-            gameViewModel.StartGame()
         }
-        ){
-            Text("遊戲開始")
-        }
+
     }
+    Text(
+        text = message + gameViewModel.screenWidthPx.toFloat() + "*"
+                + gameViewModel.screenHeightPx.toFloat()
+    )
 
+    Button(onClick = {
+        gameViewModel.gameRunning = true
+        gameViewModel.StartGame()
+    }
+    ){
+        Text("遊戲開始")
+    }
 }

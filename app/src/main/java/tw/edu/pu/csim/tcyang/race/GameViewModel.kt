@@ -1,4 +1,4 @@
-package tw.edu.pu.csim.tcyang.race
+package com.example.race
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import tw.edu.pu.csim.tcyang.race.Horse
 
 class GameViewModel: ViewModel() {
         var screenWidthPx by mutableStateOf(0f)
@@ -19,10 +20,17 @@ class GameViewModel: ViewModel() {
     var circleX by mutableStateOf(0f)
     var circleY by mutableStateOf(0f)
 
-    val horse = Horse()
+    //val horse = Horse()
+    val horses = mutableListOf<Horse>()
 
+    fun SetGameSize(w: Float, h: Float) {
+        screenWidthPx = w
+        screenHeightPx = h
 
-
+        for(i in 0..2){
+            horses.add(Horse(i))
+            }
+        }
     fun StartGame() {
         //回到初使位置
         circleX = 100f
@@ -36,9 +44,11 @@ class GameViewModel: ViewModel() {
                 if (circleX >= screenWidthPx - 100){
                     circleX = 100f
                 }
-                horse.Run()
-                if(horse.HorseX>=screenWidthPx-300){
-                    horse.HorseX=0
+
+                for(i in 0..2){
+                    horses[i].Run()
+                    if(horses[i].HorseX>=screenWidthPx-300){
+                        horses[i].HorseX=0
                 }
             }
         }
