@@ -1,7 +1,8 @@
-package tw.edu.pu.csim.tcyang.race
+qinghong179-spec com.example.race
 
 import android.widget.Button
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.R
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,6 +19,14 @@ import androidx.compose.ui.unit.IntSize
 
 @Composable
 fun GameScreen(message: String,gameViewModel: GameViewModel) {
+
+    val imageBitmaps = listOf(
+        ImageBitmap.imageResource(R.drawable.horse0),
+        ImageBitmap.imageResource(R.drawable.horse1),
+        ImageBitmap.imageResource(R.drawable.horse2),
+        ImageBitmap.imageResource(R.drawable.horse3)
+
+    )
 
     val imageBitmap= ImageBitmap.imageResource(R.drawable.horse0)
     Box(
@@ -40,8 +49,8 @@ fun GameScreen(message: String,gameViewModel: GameViewModel) {
             )
 
             drawImage(
-                image = imageBitmap,
-                dstOffset = IntOffset(0, 100),
+                image = imageBitmap[gameViewModel.horse.HorseNo],
+                dstOffset = IntOffset(gameViewModel.horse.HorseX, gameViewModel.horse.HorseY),
                 dstSize = IntSize(300,300)
 
             )
@@ -54,8 +63,8 @@ fun GameScreen(message: String,gameViewModel: GameViewModel) {
         Button(onClick = {
             gameViewModel.gameRunning = true
             gameViewModel.StartGame()
-        })
-        {
+        }
+        ){
             Text("遊戲開始")
         }
     }
